@@ -3,6 +3,7 @@ package parser
 import (
 	"bufio"
 	"fmt"
+	"strings"
 )
 
 type CommandType string
@@ -29,5 +30,8 @@ func (p *Parser) hasMoreCommands() bool {
 
 func (p *Parser) advance() {
 	line := p.scanner.Text()
+	if line == "" || strings.HasPrefix(line, "//") {
+		return
+	}
 	fmt.Println(line)
 }
