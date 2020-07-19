@@ -34,7 +34,7 @@ func TestNew(t *testing.T) {
 	}
 }
 
-func TesthasMoreCommands(t *testing.T) {
+func TestHasMoreCommands(t *testing.T) {
 	s := readfile("../../test.asm")
 
 	tests := []struct {
