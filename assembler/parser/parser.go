@@ -2,6 +2,7 @@ package parser
 
 import (
 	"bufio"
+	"fmt"
 )
 
 type CommandType string
@@ -24,4 +25,9 @@ func New(scanner *bufio.Scanner) *Parser {
 
 func (p *Parser) hasMoreCommands() bool {
 	return p.scanner.Scan()
+}
+
+func (p *Parser) advance() {
+	line := p.scanner.Text()
+	fmt.Println(line)
 }
