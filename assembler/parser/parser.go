@@ -22,5 +22,6 @@ func New(scanner *bufio.Scanner) *Parser {
 	return p
 }
 
-// func (p *Parser) hasMoreCommands() bool {
-// }
+func (p *Parser) hasMoreCommands() bool {
+	return p.scanner.Scan()
+}
