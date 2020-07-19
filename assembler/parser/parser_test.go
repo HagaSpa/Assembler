@@ -73,28 +73,74 @@ func TestHasMoreCommands(t *testing.T) {
 }
 
 func TestAdvance(t *testing.T) {
-	s := readfile("../../test.asm")
-
+	s := readfile("../../test2.asm")
 	tests := []struct {
 		name string
-		s    *bufio.Scanner
 		want *Parser
 	}{
 		{
-			"test1",
-			s,
+			"line1",
 			&Parser{
-				scanner: s,
+				scanner:     s,
+				commandType: A_COMMAND,
+				symbol:      "2",
+			},
+		},
+		{
+			"line2",
+			&Parser{
+				scanner:     s,
+				commandType: C_COMMAND,
+				dest:        "D",
+				comp:        "A",
+			},
+		},
+		{
+			"line3",
+			&Parser{
+				scanner:     s,
+				commandType: A_COMMAND,
+				symbol:      "3",
+			},
+		},
+		{
+			"line4",
+			&Parser{
+				scanner:     s,
+				commandType: C_COMMAND,
+				dest:        "D",
+				comp:        "D+A",
+			},
+		},
+		{
+			"line5",
+			&Parser{
+				scanner:     s,
+				commandType: A_COMMAND,
+				symbol:      "0",
+			},
+		},
+		{
+			"line6",
+			&Parser{
+				scanner:     s,
+				commandType: C_COMMAND,
+				dest:        "M",
+				comp:        "D",
 			},
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			p := New(tt.s)
-			for p.hasMoreCommands() {
-				p.advance()
+
+	p := New(s)
+	i := 0
+	for p.hasMoreCommands() {
+		p.advance()
+		t.Run(tests[i].name, func(t *testing.T) {
+			if !reflect.DeepEqual(p, tests[i].want) {
+				t.Errorf("advance() = %v, want %v", p, tests[i].want)
 			}
 		})
+		i++
 	}
 }
 
