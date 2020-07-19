@@ -1,41 +1,43 @@
 package parser
 
 import (
+	"bufio"
+	"os"
 	"reflect"
 	"testing"
 )
 
 func TestNew(t *testing.T) {
+	s := readfile("../../test.asm")
+
 	tests := []struct {
 		name string
-		f    []byte
+		s    *bufio.Scanner
 		want *Parser
 	}{
 		{
 			"test1",
-			[]byte(`
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/06/add/Add.asm
-
-// Computes R0 = 2 + 3  (R0 refers to RAM[0])
-
-@2
-D=A
-@3
-D=D+A
-@0
-M=D
-`),
-			&Parser{},
+			s,
+			&Parser{
+				scanner: s,
+			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := New(tt.f); !reflect.DeepEqual(got, tt.want) {
+			if got := New(tt.s); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("New() = %v, want %v", got, tt.want)
 			}
 		})
 	}
+}
+
+func readfile(fileName string) *bufio.Scanner {
+	fp, err := os.Open(fileName)
+	if err != nil {
+		panic(err)
+	}
+	defer fp.Close()
+	s := bufio.NewScanner(fp)
+	return s
 }
