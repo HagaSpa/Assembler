@@ -1,0 +1,27 @@
+name: go test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    name: Do Test
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Set up Go 1.14
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.14
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Test Parser
+      run: go test ./parser/
+      working-directory: ./assembler
