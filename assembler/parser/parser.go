@@ -6,15 +6,13 @@ import (
 	"strings"
 )
 
-type CommandType string
-
 type Parser struct {
-	scanner     *bufio.Scanner
-	commandType CommandType
-	symbol      string
-	dest        string
-	comp        string
-	jump        string
+	scanner *bufio.Scanner
+	Type    string
+	Symbol  string
+	Dest    string
+	Comp    string
+	Jump    string
 }
 
 const (
@@ -30,16 +28,16 @@ func New(scanner *bufio.Scanner) *Parser {
 	return p
 }
 
-func (p *Parser) hasMoreCommands() bool {
+func (p *Parser) HasMoreCommands() bool {
 	return p.scanner.Scan()
 }
 
-func (p *Parser) advance() {
+func (p *Parser) Advance() {
 	line := p.scanner.Text()
 	if line == "" || strings.HasPrefix(line, "//") {
 		return
 	}
-	p.setCommand(line)
+	p.genParser(line)
 	fmt.Println(line)
 }
 
@@ -50,33 +48,33 @@ func (p *Parser) advance() {
        dest=comp;jump
    comp is required and either dest or jump is empty. There is never both.
 */
-func (p *Parser) setCommand(line string) {
+func (p *Parser) genParser(line string) {
 	// A command
 	if strings.HasPrefix(line, "@") {
-		p.commandType = A_COMMAND
-		p.symbol = line[1:]
-		p.dest = ""
-		p.comp = ""
-		p.jump = ""
+		p.Type = A_COMMAND
+		p.Symbol = line[1:]
+		p.Dest = ""
+		p.Comp = ""
+		p.Jump = ""
 		return
 	}
 
 	// C command
-	p.commandType = C_COMMAND
-	p.symbol = ""
+	p.Type = C_COMMAND
+	p.Symbol = ""
 
 	// contains dest
 	if strings.Contains(line, "=") {
 		ei := strings.Index(line, "=")
-		p.dest = line[:ei]
-		p.comp = line[ei+1:]
-		p.jump = ""
+		p.Dest = line[:ei]
+		p.Comp = line[ei+1:]
+		p.Jump = ""
 		return
 	}
 
 	// contains jump
 	ji := strings.Index(line, ";")
-	p.jump = line[ji+1:]
-	p.comp = line[:ji]
-	p.dest = ""
+	p.Jump = line[ji+1:]
+	p.Comp = line[:ji]
+	p.Dest = ""
 }

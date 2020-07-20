@@ -54,7 +54,7 @@ func TestHasMoreCommands(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			p := New(tt.s)
 			// true
-			b1 := p.hasMoreCommands()
+			b1 := p.HasMoreCommands()
 			if !reflect.DeepEqual(b1, true) {
 				t.Errorf("hasMoreCommands() = %v, want %v", b1, true)
 			}
@@ -64,7 +64,7 @@ func TestHasMoreCommands(t *testing.T) {
 				// pass
 			}
 			// false
-			b2 := p.hasMoreCommands()
+			b2 := p.HasMoreCommands()
 			if !reflect.DeepEqual(b2, false) {
 				t.Errorf("hasMoreCommands() = %v, want %v", b2, false)
 			}
@@ -81,60 +81,60 @@ func TestAdvance(t *testing.T) {
 		{
 			"line1",
 			&Parser{
-				scanner:     s,
-				commandType: A_COMMAND,
-				symbol:      "2",
+				scanner: s,
+				Type:    A_COMMAND,
+				Symbol:  "2",
 			},
 		},
 		{
 			"line2",
 			&Parser{
-				scanner:     s,
-				commandType: C_COMMAND,
-				dest:        "D",
-				comp:        "A",
+				scanner: s,
+				Type:    C_COMMAND,
+				Dest:    "D",
+				Comp:    "A",
 			},
 		},
 		{
 			"line3",
 			&Parser{
-				scanner:     s,
-				commandType: A_COMMAND,
-				symbol:      "3",
+				scanner: s,
+				Type:    A_COMMAND,
+				Symbol:  "3",
 			},
 		},
 		{
 			"line4",
 			&Parser{
-				scanner:     s,
-				commandType: C_COMMAND,
-				dest:        "D",
-				comp:        "D+A",
+				scanner: s,
+				Type:    C_COMMAND,
+				Dest:    "D",
+				Comp:    "D+A",
 			},
 		},
 		{
 			"line5",
 			&Parser{
-				scanner:     s,
-				commandType: A_COMMAND,
-				symbol:      "0",
+				scanner: s,
+				Type:    A_COMMAND,
+				Symbol:  "0",
 			},
 		},
 		{
 			"line6",
 			&Parser{
-				scanner:     s,
-				commandType: C_COMMAND,
-				dest:        "M",
-				comp:        "D",
+				scanner: s,
+				Type:    C_COMMAND,
+				Dest:    "M",
+				Comp:    "D",
 			},
 		},
 	}
 
 	p := New(s)
 	i := 0
-	for p.hasMoreCommands() {
-		p.advance()
+	for p.HasMoreCommands() {
+		p.Advance()
 		t.Run(tests[i].name, func(t *testing.T) {
 			if !reflect.DeepEqual(p, tests[i].want) {
 				t.Errorf("advance() = %v, want %v", p, tests[i].want)
