@@ -25,3 +25,7 @@ jobs:
     - name: Test Parser
       run: go test ./parser/
       working-directory: ./assembler
+
+    - name: Test Code
+      run: go test ./code/
+      working-directory: ./assembler
