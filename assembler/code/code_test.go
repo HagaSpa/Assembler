@@ -80,6 +80,221 @@ func TestGenDest(t *testing.T) {
 	}
 }
 
+func TestGenComp(t *testing.T) {
+	tests := []struct {
+		name string
+		args string
+		want *Code
+	}{
+		{
+			name: "test 0",
+			args: "0",
+			want: &Code{
+				comp: "0101010",
+			},
+		},
+		{
+			name: "test 1",
+			args: "1",
+			want: &Code{
+				comp: "0111111",
+			},
+		},
+		{
+			name: "test -1",
+			args: "-1",
+			want: &Code{
+				comp: "0111010",
+			},
+		},
+		{
+			name: "test D",
+			args: "D",
+			want: &Code{
+				comp: "0001100",
+			},
+		},
+		{
+			name: "test A",
+			args: "A",
+			want: &Code{
+				comp: "0110000",
+			},
+		},
+		{
+			name: "test !D",
+			args: "!D",
+			want: &Code{
+				comp: "0001101",
+			},
+		},
+		{
+			name: "test !A",
+			args: "!A",
+			want: &Code{
+				comp: "0110001",
+			},
+		},
+		{
+			name: "test -D",
+			args: "-D",
+			want: &Code{
+				comp: "0001111",
+			},
+		},
+		{
+			name: "test -A",
+			args: "-A",
+			want: &Code{
+				comp: "0110011",
+			},
+		},
+		{
+			name: "test D+1",
+			args: "D+1",
+			want: &Code{
+				comp: "0011111",
+			},
+		},
+		{
+			name: "test A+1",
+			args: "A+1",
+			want: &Code{
+				comp: "0110111",
+			},
+		},
+		{
+			name: "test D-1",
+			args: "D-1",
+			want: &Code{
+				comp: "0001110",
+			},
+		},
+		{
+			name: "test A-1",
+			args: "A-1",
+			want: &Code{
+				comp: "0110010",
+			},
+		},
+		{
+			name: "test D+A",
+			args: "D+A",
+			want: &Code{
+				comp: "0000010",
+			},
+		},
+		{
+			name: "test D-A",
+			args: "D-A",
+			want: &Code{
+				comp: "0010011",
+			},
+		},
+		{
+			name: "test A-D",
+			args: "A-D",
+			want: &Code{
+				comp: "0000111",
+			},
+		},
+		{
+			name: "test D&A",
+			args: "D&A",
+			want: &Code{
+				comp: "0000000",
+			},
+		},
+		{
+			name: "test D|A",
+			args: "D|A",
+			want: &Code{
+				comp: "0010101",
+			},
+		},
+		{
+			name: "test M",
+			args: "M",
+			want: &Code{
+				comp: "1110000",
+			},
+		},
+		{
+			name: "test !M",
+			args: "!M",
+			want: &Code{
+				comp: "1110001",
+			},
+		},
+		{
+			name: "test -M",
+			args: "-M",
+			want: &Code{
+				comp: "1110011",
+			},
+		},
+		{
+			name: "test M+1",
+			args: "M+1",
+			want: &Code{
+				comp: "1110111",
+			},
+		},
+		{
+			name: "test M-1",
+			args: "M-1",
+			want: &Code{
+				comp: "1110010",
+			},
+		},
+		{
+			name: "test D+M",
+			args: "D+M",
+			want: &Code{
+				comp: "1000010",
+			},
+		},
+		{
+			name: "test D-M",
+			args: "D-M",
+			want: &Code{
+				comp: "1010011",
+			},
+		},
+		{
+			name: "test M-D",
+			args: "M-D",
+			want: &Code{
+				comp: "1000111",
+			},
+		},
+		{
+			name: "test D&M",
+			args: "D&M",
+			want: &Code{
+				comp: "1000000",
+			},
+		},
+		{
+			name: "test D|M",
+			args: "D|M",
+			want: &Code{
+				comp: "1010101",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &Code{}
+			c.genComp(tt.args)
+			if !reflect.DeepEqual(c, tt.want) {
+				t.Errorf("getComp() = %v, want %v", c, tt.want)
+			}
+		})
+	}
+}
+
 func TestGenJump(t *testing.T) {
 	tests := []struct {
 		name string
