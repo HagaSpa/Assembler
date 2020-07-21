@@ -79,3 +79,78 @@ func TestGenDest(t *testing.T) {
 		})
 	}
 }
+
+func TestGenJump(t *testing.T) {
+	tests := []struct {
+		name string
+		args string
+		want *Code
+	}{
+		{
+			name: "test null (empty)",
+			args: "",
+			want: &Code{
+				jump: "000",
+			},
+		},
+		{
+			name: "test JGT",
+			args: "JGT",
+			want: &Code{
+				jump: "001",
+			},
+		},
+		{
+			name: "test JEQ",
+			args: "JEQ",
+			want: &Code{
+				jump: "010",
+			},
+		},
+		{
+			name: "test JGE",
+			args: "JGE",
+			want: &Code{
+				jump: "011",
+			},
+		},
+		{
+			name: "test JLT",
+			args: "JLT",
+			want: &Code{
+				jump: "100",
+			},
+		},
+		{
+			name: "test JNE",
+			args: "JNE",
+			want: &Code{
+				jump: "101",
+			},
+		},
+		{
+			name: "test JLE",
+			args: "JLE",
+			want: &Code{
+				jump: "110",
+			},
+		},
+		{
+			name: "test JMP",
+			args: "JMP",
+			want: &Code{
+				jump: "111",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &Code{}
+			c.genJump(tt.args)
+			if !reflect.DeepEqual(c, tt.want) {
+				t.Errorf("getJump() = %v, want %v", c, tt.want)
+			}
+		})
+	}
+}
