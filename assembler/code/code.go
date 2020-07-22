@@ -5,10 +5,10 @@ import (
 )
 
 type Code struct {
-	dest string // 3bit
-	comp string // 7bit
-	jump string // 3bit
-	Code string // When A Command value. Return
+	dest   string // 3bit
+	comp   string // 7bit
+	jump   string // 3bit
+	Binary string // Binary Code
 }
 
 func New(p *parser.Parser) *Code {
