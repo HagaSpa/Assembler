@@ -369,3 +369,35 @@ func TestGenJump(t *testing.T) {
 		})
 	}
 }
+
+func TestGenBinaryC(t *testing.T) {
+	tests := []struct {
+		name string
+		args *Code
+		want *Code
+	}{
+		{
+			name: "test D=A",
+			args: &Code{
+				dest: "010",
+				comp: "0110000",
+				jump: "000",
+			},
+			want: &Code{
+				dest:   "010",
+				comp:   "0110000",
+				jump:   "000",
+				Binary: "1110110000010000",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.args.genBinaryC()
+			if !reflect.DeepEqual(tt.args, tt.want) {
+				t.Errorf("genBinaryC() = %v, want %v", tt.args, tt.want)
+			}
+		})
+	}
+}

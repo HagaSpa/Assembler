@@ -16,6 +16,7 @@ func New(p *parser.Parser) *Code {
 	if p.Type == parser.C_COMMAND {
 		c.genDest(p.Dest)
 		c.genJump(p.Jump)
+		c.genBinaryC()
 	}
 	return c
 }
@@ -127,4 +128,8 @@ func (c *Code) genJump(jump string) {
 	default:
 		// err
 	}
+}
+
+func (c *Code) genBinaryC() {
+	c.Binary = "111" + c.comp + c.dest + c.jump
 }
