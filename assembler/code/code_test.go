@@ -401,3 +401,50 @@ func TestGenBinaryC(t *testing.T) {
 		})
 	}
 }
+
+func TestGenBinaryA(t *testing.T) {
+	tests := []struct {
+		name string
+		args string
+		want *Code
+	}{
+		{
+			name: "test 2",
+			args: "2",
+			want: &Code{
+				Binary: "0000000000000010",
+			},
+		},
+		{
+			name: "test 3",
+			args: "3",
+			want: &Code{
+				Binary: "0000000000000011",
+			},
+		},
+		{
+			name: "test 0",
+			args: "0",
+			want: &Code{
+				Binary: "0000000000000000",
+			},
+		},
+		{
+			name: "test 10",
+			args: "10",
+			want: &Code{
+				Binary: "0000000000001010",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &Code{}
+			c.genBinaryA(tt.args)
+			if !reflect.DeepEqual(c, tt.want) {
+				t.Errorf("genBinaryA() = %v, want %v", c, tt.want)
+			}
+		})
+	}
+}

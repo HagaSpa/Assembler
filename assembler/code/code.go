@@ -2,6 +2,8 @@ package code
 
 import (
 	"assembler/parser"
+	"fmt"
+	"strconv"
 )
 
 type Code struct {
@@ -17,6 +19,9 @@ func New(p *parser.Parser) *Code {
 		c.genDest(p.Dest)
 		c.genJump(p.Jump)
 		c.genBinaryC()
+	} else {
+		// A command
+		c.genBinaryA(p.Symbol)
 	}
 	return c
 }
@@ -132,4 +137,20 @@ func (c *Code) genJump(jump string) {
 
 func (c *Code) genBinaryC() {
 	c.Binary = "111" + c.comp + c.dest + c.jump
+}
+
+func (c *Code) genBinaryA(symbol string) {
+	is, err := strconv.Atoi(symbol)
+	if err != nil {
+		// err
+	}
+	// convert to binary number
+	bn := fmt.Sprintf("%b", is)
+	// number of zeros to pad to 16
+	cnt := 16 - len(bn)
+	pad := ""
+	for i := 0; i < cnt; i++ {
+		pad = pad + "0"
+	}
+	c.Binary = pad + bn
 }
