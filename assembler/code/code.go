@@ -17,6 +17,7 @@ func New(p *parser.Parser) *Code {
 	c := &Code{}
 	if p.Type == parser.C_COMMAND {
 		c.genDest(p.Dest)
+		c.genComp(p.Comp)
 		c.genJump(p.Jump)
 		c.genBinaryC()
 	} else {
