@@ -39,5 +39,23 @@ func main() {
 
 	fmt.Printf("%s \n", b)
 
+	writeLine("test.hack", b)
+
 	defer fp.Close()
+}
+
+func writeLine(name string, b []string) {
+	fp, err := os.Create(name)
+	if err != nil {
+		os.Exit(1)
+	}
+	defer fp.Close()
+
+	for _, line := range b {
+		// TODO: Unix Only?
+		_, err := fp.WriteString(line + "\n")
+		if err != nil {
+			os.Exit(1)
+		}
+	}
 }
