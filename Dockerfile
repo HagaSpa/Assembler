@@ -1,10 +1,12 @@
 FROM --platform=${BUILDPLATFORM} golang:1.14.4-alpine AS build
 WORKDIR /src
 ENV CGO_ENABLED=0
-COPY . .
+COPY ./assembler ./assembler
+
+WORKDIR /src/assembler
 ARG TARGETOS
 ARG TARGETARCH
-RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o /out/main ./assembler
+RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o /out/main .
 
 FROM scratch AS bin-unix
 COPY --from=build /out/main /
