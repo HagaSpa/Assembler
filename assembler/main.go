@@ -5,8 +5,9 @@ import (
 	"assembler/parser"
 	"bufio"
 	"flag"
-	"fmt"
 	"os"
+	"path/filepath"
+	"regexp"
 )
 
 func main() {
@@ -37,9 +38,10 @@ func main() {
 		b = append(b, c.Binary)
 	}
 
-	fmt.Printf("%s \n", b)
-
-	writeLine("test.hack", b)
+	// generate .hack file
+	rep := regexp.MustCompile(`.asm$`)
+	name := filepath.Base(rep.ReplaceAllString(flags[0], "")) + ".hack"
+	writeLine(name, b)
 
 	defer fp.Close()
 }
