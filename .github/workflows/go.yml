@@ -49,4 +49,4 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build macOS
-      run: make --PLATFORM=darwin/amd64
+      run: make PLATFORM=darwin/amd64
