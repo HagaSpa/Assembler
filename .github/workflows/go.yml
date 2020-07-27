@@ -29,6 +29,10 @@ jobs:
     - name: Test Code
       run: go test ./code/
       working-directory: ./assembler
+    
+    - name: Test Main
+      run: go test
+      working-directory: ./assembler
 
 
   build:
