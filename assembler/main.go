@@ -5,10 +5,19 @@ import (
 	"assembler/parser"
 	"bufio"
 	"flag"
+	"io"
 	"os"
 	"path/filepath"
 	"regexp"
 )
+
+// WriteCloser is interface, for testing I/O
+type WriteCloser interface {
+	io.WriteCloser
+	WriteString(s string) (n int, err error)
+}
+
+var createFileIF func(name string) (WriteCloser, error)
 
 func main() {
 	// parse args
@@ -41,13 +50,16 @@ func main() {
 	// generate .hack file
 	rep := regexp.MustCompile(`.asm$`)
 	name := filepath.Base(rep.ReplaceAllString(flags[0], "")) + ".hack"
+	createFileIF = func(name string) (WriteCloser, error) {
+		return os.Create(name)
+	}
 	writeLine(name, b)
 
 	defer fp.Close()
 }
 
 func writeLine(name string, b []string) {
-	fp, err := os.Create(name)
+	fp, err := createFileIF(name)
 	if err != nil {
 		os.Exit(1)
 	}
