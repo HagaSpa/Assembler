@@ -12,8 +12,10 @@ type testWriteCloser struct {
 
 func (testWriteCloser) Close() error { return nil }
 func (testWriteCloser) WriteString(s string) (n int, err error) {
-	buf := bytes.NewBufferString(s)
-	outputMap[fileName] = buf
+	b := &bytes.Buffer{}
+	b.Write(outputMap[fileName].Bytes())
+	b.WriteString(s)
+	outputMap[fileName] = b
 	return 0, nil
 }
 
@@ -43,9 +45,14 @@ func Test_writeLine(t *testing.T) {
 			"test.hack",
 			[]string{
 				"0000000000000010",
+				"1110110000010000",
+				"0000000000000011",
+				"1110000010010000",
+				"0000000000000000",
+				"1110001100001000",
 			},
 			map[string]string{
-				"test.hack": "0000000000000010\n",
+				"test.hack": "0000000000000010\n1110110000010000\n0000000000000011\n1110000010010000\n0000000000000000\n1110001100001000\n",
 			},
 		},
 	}
