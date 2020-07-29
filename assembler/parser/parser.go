@@ -59,6 +59,16 @@ func (p *Parser) genParser(line string) {
 		return
 	}
 
+	// L command
+	if strings.HasPrefix(line, "(") {
+		p.Type = L_COMMAND
+		p.Symbol = strings.Trim(line, "()")
+		p.Dest = ""
+		p.Comp = ""
+		p.Jump = ""
+		return
+	}
+
 	// C command
 	p.Type = C_COMMAND
 	p.Symbol = ""
