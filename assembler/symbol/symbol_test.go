@@ -102,3 +102,31 @@ func TestAddEntry(t *testing.T) {
 		})
 	}
 }
+
+func TestContains(t *testing.T) {
+	tests := []struct {
+		name   string
+		symbol string
+		want   bool
+	}{
+		{
+			"test1",
+			"SP",
+			true,
+		},
+		{
+			"test2",
+			"NONE",
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			table := New()
+			got := table.Contains(tt.symbol)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Contains = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
