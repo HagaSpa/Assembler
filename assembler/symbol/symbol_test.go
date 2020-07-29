@@ -130,3 +130,26 @@ func TestContains(t *testing.T) {
 		})
 	}
 }
+
+func TestGetAddress(t *testing.T) {
+	tests := []struct {
+		name   string
+		symbol string
+		want   int
+	}{
+		{
+			"test1",
+			"SP",
+			0x0000,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			table := New()
+			got := table.GetAddress(tt.symbol)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetAddress() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

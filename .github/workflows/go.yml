@@ -34,6 +34,10 @@ jobs:
       run: go test
       working-directory: ./assembler
 
+    - name: Test Symbol
+      run: go test ./symbol/
+      working-directory: ./assembler
+
 
   build:
     name: go build
