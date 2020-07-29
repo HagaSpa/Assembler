@@ -37,8 +37,18 @@ func (p *Parser) Advance() {
 	if line == "" || strings.HasPrefix(line, "//") {
 		return
 	}
+	p.init()
 	p.genParser(line)
 	fmt.Println(line)
+}
+
+// Initialize parser fields
+func (p *Parser) init() {
+	p.Type = ""
+	p.Symbol = ""
+	p.Dest = ""
+	p.Comp = ""
+	p.Jump = ""
 }
 
 /*
@@ -53,9 +63,6 @@ func (p *Parser) genParser(line string) {
 	if strings.HasPrefix(line, "@") {
 		p.Type = A_COMMAND
 		p.Symbol = line[1:]
-		p.Dest = ""
-		p.Comp = ""
-		p.Jump = ""
 		return
 	}
 
@@ -63,22 +70,17 @@ func (p *Parser) genParser(line string) {
 	if strings.HasPrefix(line, "(") {
 		p.Type = L_COMMAND
 		p.Symbol = strings.Trim(line, "()")
-		p.Dest = ""
-		p.Comp = ""
-		p.Jump = ""
 		return
 	}
 
 	// C command
 	p.Type = C_COMMAND
-	p.Symbol = ""
 
 	// contains dest
 	if strings.Contains(line, "=") {
 		ei := strings.Index(line, "=")
 		p.Dest = line[:ei]
 		p.Comp = line[ei+1:]
-		p.Jump = ""
 		return
 	}
 
@@ -86,5 +88,4 @@ func (p *Parser) genParser(line string) {
 	ji := strings.Index(line, ";")
 	p.Jump = line[ji+1:]
 	p.Comp = line[:ji]
-	p.Dest = ""
 }
