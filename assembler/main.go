@@ -3,8 +3,10 @@ package main
 import (
 	"assembler/code"
 	"assembler/parser"
+	"assembler/symbol"
 	"bufio"
 	"flag"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -35,14 +37,20 @@ func main() {
 	}
 	s := bufio.NewScanner(fp)
 
+	// generate symbol table
+	tp := parser.New(s)
+	t := genTable(tp)
+	fmt.Println(t)
+
 	// generate binary
 	var b []string
 	p := parser.New(s)
 	for p.HasMoreCommands() {
 		p.Advance()
-		if p.Type == "" {
+		if p.Type == "" || p.Type == parser.L_COMMAND {
 			continue
 		}
+		// TODO: TypeがA_COMMANDなら、symbol_tableへの問い合わせと、追加を行う
 		c := code.New(p)
 		b = append(b, c.Binary)
 	}
@@ -72,4 +80,19 @@ func writeLine(name string, b []string) {
 			os.Exit(1)
 		}
 	}
+}
+
+func genTable(p *parser.Parser) symbol.Table {
+	t := symbol.New()
+	addr := 0
+	for p.HasMoreCommands() {
+		p.Advance()
+		switch p.Type {
+		case parser.A_COMMAND, parser.C_COMMAND:
+			addr++
+		case parser.L_COMMAND:
+			t.AddEntry(p.Symbol, addr)
+		}
+	}
+	return t
 }
