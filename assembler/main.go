@@ -42,6 +42,10 @@ func main() {
 	t := genTable(tp)
 	fmt.Println(t)
 
+	// reset file pointer
+	fp.Seek(0, 0)
+	s = bufio.NewScanner(fp)
+
 	// generate binary
 	var b []string
 	p := parser.New(s)
