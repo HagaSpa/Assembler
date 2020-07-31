@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 )
 
 // WriteCloser is interface, for testing I/O
@@ -49,12 +50,21 @@ func main() {
 	// generate binary
 	var b []string
 	p := parser.New(s)
+	addr := 0x0010 // start to 16
 	for p.HasMoreCommands() {
 		p.Advance()
 		if p.Type == "" || p.Type == parser.L_COMMAND {
 			continue
 		}
-		// TODO: TypeがA_COMMANDなら、symbol_tableへの問い合わせと、追加を行う
+		if p.Type == parser.A_COMMAND {
+			// Only Character
+			_, ok := strconv.Atoi(p.Symbol)
+			if ok != nil {
+				// add or update
+				t.AddEntry(p.Symbol, addr)
+				addr++
+			}
+		}
 		c := code.New(p)
 		b = append(b, c.Binary)
 	}
@@ -88,7 +98,7 @@ func writeLine(name string, b []string) {
 
 func genTable(p *parser.Parser) symbol.Table {
 	t := symbol.New()
-	addr := 0
+	addr := 0x0000 // start to 0
 	for p.HasMoreCommands() {
 		p.Advance()
 		switch p.Type {
