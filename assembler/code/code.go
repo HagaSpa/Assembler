@@ -2,6 +2,7 @@ package code
 
 import (
 	"assembler/parser"
+	"assembler/symbol"
 	"fmt"
 	"strconv"
 )
@@ -13,7 +14,7 @@ type Code struct {
 	Binary string // Binary Code
 }
 
-func New(p *parser.Parser) *Code {
+func New(p *parser.Parser, t symbol.Table) *Code {
 	c := &Code{}
 	if p.Type == parser.C_COMMAND {
 		c.genDest(p.Dest)
@@ -22,7 +23,11 @@ func New(p *parser.Parser) *Code {
 		c.genBinaryC()
 	} else {
 		// A command
-		c.genBinaryA(p.Symbol)
+		is, ok := strconv.Atoi(p.Symbol)
+		if ok != nil {
+			is = t.GetAddress(p.Symbol)
+		}
+		c.genBinaryA(is)
 	}
 	return c
 }
@@ -140,11 +145,7 @@ func (c *Code) genBinaryC() {
 	c.Binary = "111" + c.comp + c.dest + c.jump
 }
 
-func (c *Code) genBinaryA(symbol string) {
-	is, err := strconv.Atoi(symbol)
-	if err != nil {
-		// err
-	}
+func (c *Code) genBinaryA(is int) {
 	// convert to binary number
 	bn := fmt.Sprintf("%b", is)
 	// number of zeros to pad to 16

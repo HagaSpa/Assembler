@@ -60,12 +60,17 @@ func main() {
 			// Only Character
 			_, ok := strconv.Atoi(p.Symbol)
 			if ok != nil {
-				// add or update
-				t.AddEntry(p.Symbol, addr)
+				// Convert to decimal if symbol is already displayed
+				if t.Contains(p.Symbol) {
+					a := t.GetAddress(p.Symbol)
+					p.Symbol = fmt.Sprintf("%d", a)
+				} else {
+					t.AddEntry(p.Symbol, addr)
+				}
 				addr++
 			}
 		}
-		c := code.New(p)
+		c := code.New(p, t)
 		b = append(b, c.Binary)
 	}
 
