@@ -66,8 +66,8 @@ func main() {
 					p.Symbol = fmt.Sprintf("%d", a)
 				} else {
 					t.AddEntry(p.Symbol, addr)
+					addr++
 				}
-				addr++
 			}
 		}
 		c := code.New(p, t)
