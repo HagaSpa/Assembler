@@ -137,6 +137,32 @@ func TestAdvance(t *testing.T) {
 				Symbol:  "TEST",
 			},
 		},
+		{
+			"line8",
+			&Parser{
+				scanner: s,
+				Type:    A_COMMAND,
+				Symbol:  "R0",
+			},
+		},
+		{
+			"line9",
+			&Parser{
+				scanner: s,
+				Type:    C_COMMAND,
+				Dest:    "D",
+				Comp:    "M",
+			},
+		},
+		{
+			"line10",
+			&Parser{
+				scanner: s,
+				Type:    C_COMMAND,
+				Dest:    "D",
+				Comp:    "M",
+			},
+		},
 	}
 
 	p := New(s)

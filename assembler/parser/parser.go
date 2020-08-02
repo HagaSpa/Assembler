@@ -37,12 +37,16 @@ func (p *Parser) Advance() {
 	if line == "" || strings.HasPrefix(line, "//") {
 		return
 	}
+	if strings.Contains(line, "//") {
+		line = line[:strings.Index(line, "//")]
+	}
+	line = strings.TrimSpace(line)
 	p.init()
 	p.genParser(line)
 	fmt.Println(line)
 }
 
-// Initialize parser fields
+//Initialize parser fields
 func (p *Parser) init() {
 	p.Type = ""
 	p.Symbol = ""
