@@ -2,14 +2,28 @@ package parser
 
 import (
 	"bufio"
-	"os"
 	"reflect"
+	"strings"
 	"testing"
 )
 
 func TestNew(t *testing.T) {
-	s := readfile("../../test.asm")
+	asm := `// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/06/add/Add.asm
 
+// Computes R0 = 2 + 3  (R0 refers to RAM[0])
+
+@2
+D=A
+@3
+D=D+A
+@0
+M=D
+`
+	buf := strings.NewReader(asm)
+	s := bufio.NewScanner(buf)
 	tests := []struct {
 		name string
 		s    *bufio.Scanner
@@ -35,8 +49,22 @@ func TestNew(t *testing.T) {
 }
 
 func TestHasMoreCommands(t *testing.T) {
-	s := readfile("../../test.asm")
+	asm := `// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/06/add/Add.asm
 
+// Computes R0 = 2 + 3  (R0 refers to RAM[0])
+
+@2
+D=A
+@3
+D=D+A
+@0
+M=D
+`
+	buf := strings.NewReader(asm)
+	s := bufio.NewScanner(buf)
 	tests := []struct {
 		name string
 		s    *bufio.Scanner
@@ -73,7 +101,19 @@ func TestHasMoreCommands(t *testing.T) {
 }
 
 func TestAdvance(t *testing.T) {
-	s := readfile("../../test2.asm")
+	asm := `@2
+D=A
+@3
+D=D+A
+@0
+M=D
+(TEST)
+	@R0
+	D=M              // D = first number
+D=M              // D = first number
+`
+	buf := strings.NewReader(asm)
+	s := bufio.NewScanner(buf)
 	tests := []struct {
 		name string
 		want *Parser
@@ -176,13 +216,4 @@ func TestAdvance(t *testing.T) {
 		})
 		i++
 	}
-}
-
-func readfile(fileName string) *bufio.Scanner {
-	fp, err := os.Open(fileName)
-	if err != nil {
-		panic(err)
-	}
-	s := bufio.NewScanner(fp)
-	return s
 }
