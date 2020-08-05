@@ -14,14 +14,6 @@ import (
 	"strconv"
 )
 
-// WriteCloser is interface, for testing I/O
-type WriteCloser interface {
-	io.WriteCloser
-	WriteString(s string) (n int, err error)
-}
-
-var createFileIF func(name string) (WriteCloser, error)
-
 func main() {
 	// parse args
 	flag.Parse()
@@ -36,6 +28,7 @@ func main() {
 	if err != nil {
 		os.Exit(1)
 	}
+	defer fp.Close()
 	s := bufio.NewScanner(fp)
 
 	// generate symbol table
@@ -77,27 +70,23 @@ func main() {
 	// generate .hack file
 	rep := regexp.MustCompile(`.asm$`)
 	name := filepath.Base(rep.ReplaceAllString(flags[0], "")) + ".hack"
-	createFileIF = func(name string) (WriteCloser, error) {
-		return os.Create(name)
-	}
-	writeLine(name, b)
-
-	defer fp.Close()
-}
-
-func writeLine(name string, b []string) {
-	fp, err := createFileIF(name)
+	f, err := os.Create(name)
 	if err != nil {
 		os.Exit(1)
 	}
-	defer fp.Close()
+	defer f.Close()
+	writeLine(f, b)
+}
 
+func writeLine(f io.Writer, b []string) {
+	w := bufio.NewWriter(f)
 	for _, line := range b {
 		// TODO: Unix Only?
-		_, err := fp.WriteString(line + "\n")
+		_, err := w.WriteString(line + "\n")
 		if err != nil {
 			os.Exit(1)
 		}
+		w.Flush()
 	}
 }
 
