@@ -3,7 +3,7 @@
 
 assembler for nand2tetris
 
-## Requirements　！！
+## Requirements
 * Docker 19.03 or later
 
 You need a docker environment to build with Docker.
